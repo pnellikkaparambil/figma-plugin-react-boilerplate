@@ -7,10 +7,12 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode=production",
-    "watch": "webpack --mode=development --watch"
+    "watch": "webpack --mode=development --watch",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.68.0",
+    "@playwright/experimental-ct-react": "^1.35.1",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "css-loader": "^6.8.1",

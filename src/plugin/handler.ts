@@ -16,9 +16,48 @@ export namespace Handler {
     figma.viewport.scrollAndZoomIntoView(nodes);
 
     // SEND MESSAGE BACK TO REACT UI
-    figma.ui.postMessage({
-      type: Messages.CREATE_CIRCLE,
-      message: `Created ${msg.count} Circles`,
+  };
+
+
+
+  export const handleSelection = () => {
+    const nodes: ReadonlyArray<SceneNode> = figma.currentPage.selection;
+    // nodes.forEach((element) => {
+    //   console.log('element', element.type);
+    // });
+    // check selected node is a text node
+    if (nodes.length && nodes[0].type === 'TEXT') {
+      // get the text from the node
+      const textNode: TextNode = nodes[0] as TextNode;
+      const text = textNode.characters;
+      console.log(`
+      fontSize: ${String(textNode.fontSize)},
+      fontName: ${String(JSON.stringify(textNode.fontName))},
+      text: ${text},
+  `);
+
+      // SEND MESSAGE BACK TO REACT UI
+      figma.ui.postMessage({
+        type: Messages.TEXT_SELECTED,
+        message: `
+          fontSize: ${String(textNode.fontSize)},
+          fontName: ${String(JSON.stringify(textNode.fontName))},
+          text: ${text},
+      `,
+      });
+    }else{
+      figma.ui.postMessage({
+        type: Messages.TEXT_SELECTED,
+        message: `
+         Text Node Not Found
+      `,
+      });
+    }
+
+    // on node selection
+    figma.on("selectionchange", () => {
+      console.log("figma.currentPage.selection", figma.currentPage.selection);
+      handleSelection()
     });
   };
 }
